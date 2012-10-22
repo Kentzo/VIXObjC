@@ -1,0 +1,539 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BA9AFA6D1635667300FAAAD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BA9AFA6B1635667300FAAAD3 /* InfoPlist.strings */; };
+		BA9AFA791635667300FAAAD3 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9AFA781635667300FAAAD3 /* SenTestingKit.framework */; };
+		BA9AFA7A1635667300FAAAD3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9AFA621635667300FAAAD3 /* Cocoa.framework */; };
+		BA9AFA7D1635667300FAAAD3 /* VIXObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */; };
+		BA9AFA831635667300FAAAD3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BA9AFA811635667300FAAAD3 /* InfoPlist.strings */; };
+		BA9AFA861635667300FAAAD3 /* VIXObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9AFA851635667300FAAAD3 /* VIXObjCTests.m */; };
+		BA9AFA991635672C00FAAAD3 /* libvixAllProducts.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9AFA941635672C00FAAAD3 /* libvixAllProducts.dylib */; };
+		BA9AFA9A1635672C00FAAAD3 /* open_source_licenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = BA9AFA951635672C00FAAAD3 /* open_source_licenses.txt */; };
+		BA9AFA9B1635672C00FAAAD3 /* ppport.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFA961635672C00FAAAD3 /* ppport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA9AFA9C1635672C00FAAAD3 /* vix.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFA971635672C00FAAAD3 /* vix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA9AFA9D1635672C00FAAAD3 /* vm_basic_types.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFA981635672C00FAAAD3 /* vm_basic_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA9AFA9F1635675700FAAAD3 /* libvixAllProducts.dylib in Copy libvixAllProducts */ = {isa = PBXBuildFile; fileRef = BA9AFA941635672C00FAAAD3 /* libvixAllProducts.dylib */; };
+		BA9AFAA1163568B000FAAAD3 /* includeCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFAA0163568B000FAAAD3 /* includeCheck.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA9AFAA2163568CE00FAAAD3 /* VIXObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFA6F1635667300FAAAD3 /* VIXObjC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA9AFAA51635695800FAAAD3 /* VIXHost.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFAA31635695800FAAAD3 /* VIXHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA9AFAA61635695800FAAAD3 /* VIXHost.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9AFAA41635695800FAAAD3 /* VIXHost.m */; };
+		BA9AFAA816356CCE00FAAAD3 /* VIXObjC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BA9AFA7B1635667300FAAAD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA9AFA551635667300FAAAD3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BA9AFA5E1635667300FAAAD3;
+			remoteInfo = VIXObjC;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BA9AFA9E1635673B00FAAAD3 /* Copy libvixAllProducts */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BA9AFA9F1635675700FAAAD3 /* libvixAllProducts.dylib in Copy libvixAllProducts */,
+			);
+			name = "Copy libvixAllProducts";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA9AFAA716356CC800FAAAD3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BA9AFAA816356CCE00FAAAD3 /* VIXObjC.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VIXObjC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA9AFA621635667300FAAAD3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		BA9AFA651635667300FAAAD3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		BA9AFA661635667300FAAAD3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		BA9AFA671635667300FAAAD3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BA9AFA6A1635667300FAAAD3 /* VIXObjC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VIXObjC-Info.plist"; sourceTree = "<group>"; };
+		BA9AFA6C1635667300FAAAD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BA9AFA6E1635667300FAAAD3 /* VIXObjC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VIXObjC-Prefix.pch"; sourceTree = "<group>"; };
+		BA9AFA6F1635667300FAAAD3 /* VIXObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VIXObjC.h; sourceTree = "<group>"; };
+		BA9AFA771635667300FAAAD3 /* VIXObjCTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VIXObjCTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA9AFA781635667300FAAAD3 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		BA9AFA801635667300FAAAD3 /* VIXObjCTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VIXObjCTests-Info.plist"; sourceTree = "<group>"; };
+		BA9AFA821635667300FAAAD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BA9AFA841635667300FAAAD3 /* VIXObjCTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VIXObjCTests.h; sourceTree = "<group>"; };
+		BA9AFA851635667300FAAAD3 /* VIXObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VIXObjCTests.m; sourceTree = "<group>"; };
+		BA9AFA941635672C00FAAAD3 /* libvixAllProducts.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libvixAllProducts.dylib; sourceTree = "<group>"; };
+		BA9AFA951635672C00FAAAD3 /* open_source_licenses.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = open_source_licenses.txt; sourceTree = "<group>"; };
+		BA9AFA961635672C00FAAAD3 /* ppport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppport.h; sourceTree = "<group>"; };
+		BA9AFA971635672C00FAAAD3 /* vix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vix.h; sourceTree = "<group>"; };
+		BA9AFA981635672C00FAAAD3 /* vm_basic_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_basic_types.h; sourceTree = "<group>"; };
+		BA9AFAA0163568B000FAAAD3 /* includeCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = includeCheck.h; sourceTree = "<group>"; };
+		BA9AFAA31635695800FAAAD3 /* VIXHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIXHost.h; sourceTree = "<group>"; };
+		BA9AFAA41635695800FAAAD3 /* VIXHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIXHost.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BA9AFA5B1635667300FAAAD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFA991635672C00FAAAD3 /* libvixAllProducts.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA9AFA731635667300FAAAD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFA791635667300FAAAD3 /* SenTestingKit.framework in Frameworks */,
+				BA9AFA7A1635667300FAAAD3 /* Cocoa.framework in Frameworks */,
+				BA9AFA7D1635667300FAAAD3 /* VIXObjC.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BA9AFA531635667300FAAAD3 = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA681635667300FAAAD3 /* VIXObjC */,
+				BA9AFA7E1635667300FAAAD3 /* VIXObjCTests */,
+				BA9AFA611635667300FAAAD3 /* Frameworks */,
+				BA9AFA601635667300FAAAD3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BA9AFA601635667300FAAAD3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */,
+				BA9AFA771635667300FAAAD3 /* VIXObjCTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BA9AFA611635667300FAAAD3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA621635667300FAAAD3 /* Cocoa.framework */,
+				BA9AFA781635667300FAAAD3 /* SenTestingKit.framework */,
+				BA9AFA641635667300FAAAD3 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA9AFA641635667300FAAAD3 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA651635667300FAAAD3 /* AppKit.framework */,
+				BA9AFA661635667300FAAAD3 /* CoreData.framework */,
+				BA9AFA671635667300FAAAD3 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		BA9AFA681635667300FAAAD3 /* VIXObjC */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA6F1635667300FAAAD3 /* VIXObjC.h */,
+				BA9AFAA31635695800FAAAD3 /* VIXHost.h */,
+				BA9AFAA41635695800FAAAD3 /* VIXHost.m */,
+				BA9AFA921635672100FAAAD3 /* libvixAllProducts */,
+				BA9AFA691635667300FAAAD3 /* Supporting Files */,
+			);
+			path = VIXObjC;
+			sourceTree = "<group>";
+		};
+		BA9AFA691635667300FAAAD3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA6A1635667300FAAAD3 /* VIXObjC-Info.plist */,
+				BA9AFA6B1635667300FAAAD3 /* InfoPlist.strings */,
+				BA9AFA6E1635667300FAAAD3 /* VIXObjC-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BA9AFA7E1635667300FAAAD3 /* VIXObjCTests */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA841635667300FAAAD3 /* VIXObjCTests.h */,
+				BA9AFA851635667300FAAAD3 /* VIXObjCTests.m */,
+				BA9AFA7F1635667300FAAAD3 /* Supporting Files */,
+			);
+			path = VIXObjCTests;
+			sourceTree = "<group>";
+		};
+		BA9AFA7F1635667300FAAAD3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFA801635667300FAAAD3 /* VIXObjCTests-Info.plist */,
+				BA9AFA811635667300FAAAD3 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BA9AFA921635672100FAAAD3 /* libvixAllProducts */ = {
+			isa = PBXGroup;
+			children = (
+				BA9AFAA0163568B000FAAAD3 /* includeCheck.h */,
+				BA9AFA941635672C00FAAAD3 /* libvixAllProducts.dylib */,
+				BA9AFA951635672C00FAAAD3 /* open_source_licenses.txt */,
+				BA9AFA961635672C00FAAAD3 /* ppport.h */,
+				BA9AFA971635672C00FAAAD3 /* vix.h */,
+				BA9AFA981635672C00FAAAD3 /* vm_basic_types.h */,
+			);
+			name = libvixAllProducts;
+			path = VIXObjC/libvixAllProducts;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BA9AFA5C1635667300FAAAD3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFAA2163568CE00FAAAD3 /* VIXObjC.h in Headers */,
+				BA9AFAA51635695800FAAAD3 /* VIXHost.h in Headers */,
+				BA9AFA9B1635672C00FAAAD3 /* ppport.h in Headers */,
+				BA9AFA9C1635672C00FAAAD3 /* vix.h in Headers */,
+				BA9AFA9D1635672C00FAAAD3 /* vm_basic_types.h in Headers */,
+				BA9AFAA1163568B000FAAAD3 /* includeCheck.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		BA9AFA5E1635667300FAAAD3 /* VIXObjC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA9AFA891635667300FAAAD3 /* Build configuration list for PBXNativeTarget "VIXObjC" */;
+			buildPhases = (
+				BA9AFA5A1635667300FAAAD3 /* Sources */,
+				BA9AFA5B1635667300FAAAD3 /* Frameworks */,
+				BA9AFA5C1635667300FAAAD3 /* Headers */,
+				BA9AFA5D1635667300FAAAD3 /* Resources */,
+				BA9AFAC916356DB200FAAAD3 /* ShellScript */,
+				BA9AFA9E1635673B00FAAAD3 /* Copy libvixAllProducts */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VIXObjC;
+			productName = VIXObjC;
+			productReference = BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		BA9AFA761635667300FAAAD3 /* VIXObjCTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA9AFA8C1635667300FAAAD3 /* Build configuration list for PBXNativeTarget "VIXObjCTests" */;
+			buildPhases = (
+				BA9AFA721635667300FAAAD3 /* Sources */,
+				BA9AFA731635667300FAAAD3 /* Frameworks */,
+				BA9AFA741635667300FAAAD3 /* Resources */,
+				BA9AFA751635667300FAAAD3 /* ShellScript */,
+				BA9AFAA716356CC800FAAAD3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA9AFA7C1635667300FAAAD3 /* PBXTargetDependency */,
+			);
+			name = VIXObjCTests;
+			productName = VIXObjCTests;
+			productReference = BA9AFA771635667300FAAAD3 /* VIXObjCTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BA9AFA551635667300FAAAD3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Ilya Kulakov";
+			};
+			buildConfigurationList = BA9AFA581635667300FAAAD3 /* Build configuration list for PBXProject "VIXObjC" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BA9AFA531635667300FAAAD3;
+			productRefGroup = BA9AFA601635667300FAAAD3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BA9AFA5E1635667300FAAAD3 /* VIXObjC */,
+				BA9AFA761635667300FAAAD3 /* VIXObjCTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BA9AFA5D1635667300FAAAD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFA6D1635667300FAAAD3 /* InfoPlist.strings in Resources */,
+				BA9AFA9A1635672C00FAAAD3 /* open_source_licenses.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA9AFA741635667300FAAAD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFA831635667300FAAAD3 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BA9AFA751635667300FAAAD3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		BA9AFAC916356DB200FAAAD3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "install_name_tool -id @loader_path/Frameworks/libvixAllProducts.dylib `echo $SRCROOT`/VIXObjC/libvixAllProducts/libvixAllProducts.dylib";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BA9AFA5A1635667300FAAAD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFAA61635695800FAAAD3 /* VIXHost.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA9AFA721635667300FAAAD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9AFA861635667300FAAAD3 /* VIXObjCTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BA9AFA7C1635667300FAAAD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BA9AFA5E1635667300FAAAD3 /* VIXObjC */;
+			targetProxy = BA9AFA7B1635667300FAAAD3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BA9AFA6B1635667300FAAAD3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA9AFA6C1635667300FAAAD3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BA9AFA811635667300FAAAD3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA9AFA821635667300FAAAD3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BA9AFA871635667300FAAAD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BA9AFA881635667300FAAAD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BA9AFA8A1635667300FAAAD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VIXObjC/VIXObjC-Prefix.pch";
+				INFOPLIST_FILE = "VIXObjC/VIXObjC-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../$(EXECUTABLE_PATH)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/VIXObjC/libvixAllProducts\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		BA9AFA8B1635667300FAAAD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VIXObjC/VIXObjC-Prefix.pch";
+				INFOPLIST_FILE = "VIXObjC/VIXObjC-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../$(EXECUTABLE_PATH)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/VIXObjC/libvixAllProducts\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		BA9AFA8D1635667300FAAAD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VIXObjC/VIXObjC-Prefix.pch";
+				INFOPLIST_FILE = "VIXObjCTests/VIXObjCTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		BA9AFA8E1635667300FAAAD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "VIXObjC/VIXObjC-Prefix.pch";
+				INFOPLIST_FILE = "VIXObjCTests/VIXObjCTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BA9AFA581635667300FAAAD3 /* Build configuration list for PBXProject "VIXObjC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA9AFA871635667300FAAAD3 /* Debug */,
+				BA9AFA881635667300FAAAD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA9AFA891635667300FAAAD3 /* Build configuration list for PBXNativeTarget "VIXObjC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA9AFA8A1635667300FAAAD3 /* Debug */,
+				BA9AFA8B1635667300FAAAD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA9AFA8C1635667300FAAAD3 /* Build configuration list for PBXNativeTarget "VIXObjCTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA9AFA8D1635667300FAAAD3 /* Debug */,
+				BA9AFA8E1635667300FAAAD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BA9AFA551635667300FAAAD3 /* Project object */;
+}
