@@ -18,6 +18,7 @@
                           hostPort:(int)aHostPort
                           userName:(NSString *)aUserName
                           password:(NSString *)aPassword
-                           options:(VixHostOptions)anOptions;
+                           options:(VixHostOptions)anOptions
+                      propertyList:(VixHandle)aPropertyList;
 
 @end

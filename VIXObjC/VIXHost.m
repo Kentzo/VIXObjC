@@ -21,9 +21,10 @@
                           userName:(NSString *)aUserName
                           password:(NSString *)aPassword
                            options:(VixHostOptions)anOptions
+                      propertyList:(VixHandle)aPropertyList
 {
     self = [super init];
-    
+
     if (self)
     {
         VixHandle h = VixHost_Connect(anAPIVersion,
@@ -33,20 +34,19 @@
                                       [aUserName UTF8String],
                                       [aPassword UTF8String],
                                       anOptions,
-                                      VIX_INVALID_HANDLE,
+                                      aPropertyList,
                                       NULL,
                                       NULL);
-        
         VixError e = VixJob_Wait(h,
                                  VIX_PROPERTY_JOB_RESULT_HANDLE,
                                  &_handle,
                                  VIX_PROPERTY_NONE);
         Vix_ReleaseHandle(h);
-        
-        if (e != VIX_OK)
+
+        if (!VIX_SUCCEEDED(e))
             return nil;
     }
-    
+
     return self;
 }
 
