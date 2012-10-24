@@ -24,6 +24,12 @@
 		BA9AFAA51635695800FAAAD3 /* VIXHost.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFAA31635695800FAAAD3 /* VIXHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BA9AFAA61635695800FAAAD3 /* VIXHost.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9AFAA41635695800FAAAD3 /* VIXHost.m */; };
 		BA9AFAA816356CCE00FAAAD3 /* VIXObjC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */; };
+		BC5989D453C0F3FACA5D14E1 /* VIXTypes.h in Copy libvixAllProducts */ = {isa = PBXBuildFile; fileRef = BC598E6C404846EED4488C8D /* VIXTypes.h */; };
+		E22DEE671636FDC70052FF3D /* VIXErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E22DEE661636FDC70052FF3D /* VIXErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E22DEE6A1636FE2B0052FF3D /* VIXErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = E22DEE691636FE2B0052FF3D /* VIXErrors.m */; };
+		E29FE73E1636D90F00C1357A /* VIXTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = BC598E6C404846EED4488C8D /* VIXTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E29FE7421636DA0200C1357A /* VIXVirtualMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = E29FE7401636DA0200C1357A /* VIXVirtualMachine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E29FE7431636DA0200C1357A /* VIXVirtualMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = E29FE7411636DA0200C1357A /* VIXVirtualMachine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +50,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				BA9AFA9F1635675700FAAAD3 /* libvixAllProducts.dylib in Copy libvixAllProducts */,
+				BC5989D453C0F3FACA5D14E1 /* VIXTypes.h in Copy libvixAllProducts */,
 			);
 			name = "Copy libvixAllProducts";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +91,11 @@
 		BA9AFAA0163568B000FAAAD3 /* includeCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = includeCheck.h; sourceTree = "<group>"; };
 		BA9AFAA31635695800FAAAD3 /* VIXHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIXHost.h; sourceTree = "<group>"; };
 		BA9AFAA41635695800FAAAD3 /* VIXHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIXHost.m; sourceTree = "<group>"; };
+		BC598E6C404846EED4488C8D /* VIXTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIXTypes.h; sourceTree = "<group>"; };
+		E22DEE661636FDC70052FF3D /* VIXErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIXErrors.h; sourceTree = "<group>"; };
+		E22DEE691636FE2B0052FF3D /* VIXErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIXErrors.m; sourceTree = "<group>"; };
+		E29FE7401636DA0200C1357A /* VIXVirtualMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIXVirtualMachine.h; sourceTree = "<group>"; };
+		E29FE7411636DA0200C1357A /* VIXVirtualMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIXVirtualMachine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +165,11 @@
 				BA9AFA6F1635667300FAAAD3 /* VIXObjC.h */,
 				BA9AFAA31635695800FAAAD3 /* VIXHost.h */,
 				BA9AFAA41635695800FAAAD3 /* VIXHost.m */,
+				E29FE7401636DA0200C1357A /* VIXVirtualMachine.h */,
+				E29FE7411636DA0200C1357A /* VIXVirtualMachine.m */,
+				E22DEE661636FDC70052FF3D /* VIXErrors.h */,
+				E22DEE691636FE2B0052FF3D /* VIXErrors.m */,
+				BC598E6C404846EED4488C8D /* VIXTypes.h */,
 				BA9AFA921635672100FAAAD3 /* libvixAllProducts */,
 				BA9AFA691635667300FAAAD3 /* Supporting Files */,
 			);
@@ -211,6 +228,9 @@
 			files = (
 				BA9AFAA2163568CE00FAAAD3 /* VIXObjC.h in Headers */,
 				BA9AFAA51635695800FAAAD3 /* VIXHost.h in Headers */,
+				E29FE7421636DA0200C1357A /* VIXVirtualMachine.h in Headers */,
+				E22DEE671636FDC70052FF3D /* VIXErrors.h in Headers */,
+				E29FE73E1636D90F00C1357A /* VIXTypes.h in Headers */,
 				BA9AFA9B1635672C00FAAAD3 /* ppport.h in Headers */,
 				BA9AFA9C1635672C00FAAAD3 /* vix.h in Headers */,
 				BA9AFA9D1635672C00FAAAD3 /* vm_basic_types.h in Headers */,
@@ -343,6 +363,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA9AFAA61635695800FAAAD3 /* VIXHost.m in Sources */,
+				E29FE7431636DA0200C1357A /* VIXVirtualMachine.m in Sources */,
+				E22DEE6A1636FE2B0052FF3D /* VIXErrors.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
