@@ -7,6 +7,13 @@
 //
 
 #import "VIXHost.h"
+#import "VIXErrors.h"
+
+
+static NSString *const _VIXBlockKey = @"block";
+
+static NSString *const _VIXFoundItemsKey = @"foundItems";
+
 
 
 @implementation VIXHost
@@ -65,6 +72,176 @@
                                    password:nil
                                     options:0
                                propertyList:VIX_INVALID_HANDLE];
+}
+
+
+#pragma mark - Methods
+
+#pragma mark Find Items
+
+static void SynchronouslyFindItemsCallback(VixHandle aJobHandle,
+                                           VixEventType anEventType,
+                                           VixHandle anEventInfo,
+                                           void *aContext)
+{
+    if (aContext == NULL)
+        return;
+
+    if (anEventType != VIX_EVENTTYPE_FIND_ITEM)
+        return;
+
+    char *path = NULL;
+    VixError error = Vix_GetProperties(anEventInfo,
+                                       VIX_PROPERTY_FOUND_ITEM_LOCATION, &path,
+                                       VIX_PROPERTY_NONE);
+    if (VIX_SUCCEEDED(error) && path)
+    {
+        NSMutableArray *foundItems = (__bridge NSMutableArray *)aContext;
+        [foundItems addObject:@(path)];
+        Vix_FreeBuffer(path);
+    }
+    else
+    {
+        // Ignore this error
+        // TODO: log error
+    }
+}
+
+static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
+                                            VixEventType anEventType,
+                                            VixHandle anEventInfo,
+                                            void *aContext)
+{
+    assert(aContext != NULL);
+
+    if (anEventType == VIX_EVENTTYPE_FIND_ITEM)
+    {
+        char *path = NULL;
+        VixError error = Vix_GetProperties(anEventInfo,
+                                           VIX_PROPERTY_FOUND_ITEM_LOCATION, &path,
+                                           VIX_PROPERTY_NONE);
+
+        if (VIX_SUCCEEDED(error) && path)
+        {
+            NSDictionary *arguments = (__bridge NSDictionary *)aContext;
+            NSMutableArray *foundItems = arguments[_VIXFoundItemsKey];
+
+            assert(foundItems != nil);
+
+            [foundItems addObject:@(path)];
+            Vix_FreeBuffer(path);
+        }
+    }
+    else if (anEventType == VIX_EVENTTYPE_JOB_COMPLETED)
+    {
+        NSDictionary *arguments = (NSDictionary *)CFBridgingRelease(aContext);
+        void (^completionBlock)(NSArray *aPaths, NSError *anError) = arguments[_VIXBlockKey];
+        NSMutableArray *foundItems = arguments[_VIXFoundItemsKey];
+        NSError *objcError = nil;
+
+        assert(completionBlock != nil);
+        assert(foundItems != nil);
+
+        VixError jobError = VIX_OK;
+        VixError error = Vix_GetProperties(aJobHandle,
+                                           VIX_PROPERTY_JOB_RESULT_ERROR_CODE, &jobError,
+                                           VIX_PROPERTY_NONE);
+        if (VIX_SUCCEEDED(error))
+        {
+            if (!VIX_SUCCEEDED(jobError))
+            {
+                const char *jobErrorText = Vix_GetErrorText(jobError, NULL);
+                objcError = [NSError errorWithDomain:VIXErrorDomain
+                                                code:jobError
+                                            userInfo:jobErrorText ? @{NSLocalizedDescriptionKey : @(jobErrorText)} : nil];
+            }
+        }
+        else
+        {
+            const char *errorText = Vix_GetErrorText(error, NULL);
+            objcError = [NSError errorWithDomain:VIXErrorDomain
+                                            code:error
+                                        userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
+        }
+
+        completionBlock(foundItems, objcError);
+    }
+}
+
+- (NSArray *)synchronouslyFindRunningVirtualMachinePaths:(out __autoreleasing NSError **)outError
+{
+    NSMutableArray *foundItems = [NSMutableArray array];
+    VixHandle jobHandle = VixHost_FindItems(_handle,
+                                            VIX_FIND_RUNNING_VMS,
+                                            VIX_INVALID_HANDLE,
+                                            -1,
+                                            SynchronouslyFindItemsCallback,
+                                            (__bridge void *)(foundItems));
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+
+    if (!VIX_SUCCEEDED(error) && outError)
+    {
+        const char *errorText = Vix_GetErrorText(error, NULL);
+        *outError = [NSError errorWithDomain:VIXErrorDomain
+                                        code:error
+                                    userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
+    }
+
+    return foundItems;
+}
+
+- (void)findRunningVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler
+{
+    NSParameterAssert(aCompletionHandler);
+
+    NSDictionary *arguments = @{
+        _VIXBlockKey        : [aCompletionHandler copy],
+        _VIXFoundItemsKey   : [NSMutableArray array]
+    };
+    VixHost_FindItems(_handle,
+                      VIX_FIND_RUNNING_VMS,
+                      VIX_INVALID_HANDLE,
+                      -1,
+                      AsynchronouslyFindItemsCallback,
+                      (void *)CFBridgingRetain(arguments));
+}
+
+- (NSArray *)synchronouslyFindRegisteredVirtualMachinePaths:(out __autoreleasing NSError **)outError
+{
+    NSMutableArray *foundItems = [NSMutableArray array];
+    VixHandle jobHandle = VixHost_FindItems(_handle,
+                                            VIX_FIND_REGISTERED_VMS,
+                                            VIX_INVALID_HANDLE,
+                                            -1,
+                                            SynchronouslyFindItemsCallback,
+                                            (__bridge void *)(foundItems));
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+
+    if (!VIX_SUCCEEDED(error) && outError)
+    {
+        const char *errorText = Vix_GetErrorText(error, NULL);
+        *outError = [NSError errorWithDomain:VIXErrorDomain
+                                        code:error
+                                    userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
+    }
+
+    return foundItems;
+}
+
+- (void)findRegisteredVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler
+{
+    NSParameterAssert(aCompletionHandler);
+
+    NSDictionary *arguments = @{
+        _VIXBlockKey        : [aCompletionHandler copy],
+        _VIXFoundItemsKey   : [NSMutableArray array]
+    };
+    VixHost_FindItems(_handle,
+                      VIX_FIND_REGISTERED_VMS,
+                      VIX_INVALID_HANDLE,
+                      -1,
+                      AsynchronouslyFindItemsCallback,
+                      (void *)CFBridgingRetain(arguments));
 }
 
 @end
