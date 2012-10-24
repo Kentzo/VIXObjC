@@ -50,6 +50,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    VixHost_Disconnect(_handle);
+}
+
 + (instancetype)localWorkstation
 {
     return [[self alloc] initWithAPIVersion:VIX_API_VERSION
