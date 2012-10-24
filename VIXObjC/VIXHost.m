@@ -50,4 +50,16 @@
     return self;
 }
 
++ (instancetype)localWorkstation
+{
+    return [[self alloc] initWithAPIVersion:VIX_API_VERSION
+                                   hostType:VIX_SERVICEPROVIDER_VMWARE_WORKSTATION
+                                   hostName:nil
+                                   hostPort:0
+                                   userName:nil
+                                   password:nil
+                                    options:0
+                               propertyList:VIX_INVALID_HANDLE];
+}
+
 @end

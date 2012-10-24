@@ -21,4 +21,6 @@
                            options:(VixHostOptions)anOptions
                       propertyList:(VixHandle)aPropertyList;
 
++ (instancetype)localWorkstation;
+
 @end
