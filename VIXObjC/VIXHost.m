@@ -14,6 +14,7 @@ static NSString *const _VIXBlockKey = @"block";
 
 static NSString *const _VIXFoundItemsKey = @"foundItems";
 
+static NSString *const _VIXHostKey = @"host";
 
 
 @implementation VIXHost
@@ -242,6 +243,109 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
                       -1,
                       AsynchronouslyFindItemsCallback,
                       (void *)CFBridgingRetain(arguments));
+}
+
+
+#pragma mark Manage Virtual Machines
+
+static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
+                           VixEventType anEventType,
+                           VixHandle anEventInfo,
+                           void *aContext)
+{
+    assert(aContext != NULL);
+
+    if (anEventType != VIX_EVENTTYPE_JOB_COMPLETED)
+        return;
+
+    NSDictionary *arguments = (NSDictionary *)CFBridgingRelease(aContext);
+    void (^completionBlock)(VIXVirtualMachine *aVM, NSError *anError) = arguments[_VIXBlockKey];
+    VIXHost *host = arguments[_VIXHostKey];
+
+    assert(completionBlock != nil);
+    assert(host != nil);
+
+    VixError jobError = VIX_OK;
+    VixHandle vmHandle = VIX_INVALID_HANDLE;
+    VixError error = Vix_GetProperties(aJobHandle,
+                                       VIX_PROPERTY_JOB_RESULT_ERROR_CODE, &jobError,
+                                       VIX_PROPERTY_JOB_RESULT_HANDLE, &vmHandle,
+                                       VIX_PROPERTY_NONE);
+    VIXVirtualMachine *vm = nil;
+    NSError *objcError = nil;
+
+    if (VIX_SUCCEEDED(error))
+    {
+        if (VIX_SUCCEEDED(jobError))
+            vm = [[VIXVirtualMachine alloc] initWithHost:host nativeVMHandle:vmHandle];
+        else
+        {
+            const char *jobErrorText = Vix_GetErrorText(jobError, NULL);
+            objcError = [NSError errorWithDomain:VIXErrorDomain
+                                            code:jobError
+                                        userInfo:jobErrorText ? @{NSLocalizedDescriptionKey : @(jobErrorText)} : nil];
+        }
+    }
+    else
+    {
+        const char *errorText = Vix_GetErrorText(error, NULL);
+        objcError = [NSError errorWithDomain:VIXErrorDomain
+                                        code:error
+                                    userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
+    }
+
+    completionBlock(vm, objcError);
+}
+
+- (void)openVirtualMachineAtPath:(NSString *)aPath
+                         options:(VixVMOpenOptions)anOptions
+                    propertyList:(VixHandle)aPropertyList
+                 completionHandler:(void (^)(VIXVirtualMachine *aVM, NSError *anError))aCompletionHandler
+{
+    NSParameterAssert(aCompletionHandler != nil);
+
+    NSDictionary *arguments = @{
+        _VIXBlockKey    : [aCompletionHandler copy],
+        _VIXHostKey     : self
+    };
+    VixHost_OpenVM(_handle,
+                   [aPath UTF8String],
+                   anOptions,
+                   aPropertyList,
+                   AsynchronouslyOpenVMCallback,
+                   (void *)CFBridgingRetain(arguments));
+}
+
+- (VIXVirtualMachine *)synchronouslyOpenVirtualMachineAtPath:(NSString *)aPath
+                                                     options:(VixVMOpenOptions)anOptions
+                                                propertyList:(VixHandle)aPropertyList
+                                                       error:(__autoreleasing NSError **)outError
+{
+    VixHandle jobHandle = VixHost_OpenVM(_handle,
+                                         [aPath UTF8String],
+                                         anOptions,
+                                         aPropertyList,
+                                         NULL,
+                                         NULL);
+    VixHandle vmHandle = VIX_INVALID_HANDLE;
+    VixError error = VixJob_Wait(jobHandle,
+                                 VIX_PROPERTY_JOB_RESULT_HANDLE, &vmHandle,
+                                 VIX_PROPERTY_NONE);
+
+    if (VIX_SUCCEEDED(error))
+        return [[VIXVirtualMachine alloc] initWithHost:self nativeVMHandle:vmHandle];
+    else
+    {
+        if (outError)
+        {
+            const char *errorText = Vix_GetErrorText(error, NULL);
+            *outError = [NSError errorWithDomain:VIXErrorDomain
+                                            code:error
+                                        userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
+        }
+
+        return nil;
+    }
 }
 
 @end
