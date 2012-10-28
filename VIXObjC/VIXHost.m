@@ -56,14 +56,15 @@ static NSString *const _VIXHostKey = @"host";
                                   aPropertyList,
                                   NULL,
                                   NULL);
+    VixHandle hostHandle = VIX_INVALID_HANDLE;
     VixError e = VixJob_Wait(h,
                              VIX_PROPERTY_JOB_RESULT_HANDLE,
-                             &_handle,
+                             &hostHandle,
                              VIX_PROPERTY_NONE);
     Vix_ReleaseHandle(h);
     
     if (VIX_SUCCEEDED(e))
-        return [self initWithNativeHandle:h];
+        return [self initWithNativeHandle:hostHandle];
     else
         return nil;
 }
