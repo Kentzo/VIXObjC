@@ -10,7 +10,7 @@
 #import "VIXErrors.h"
 
 
-static NSString *const _VIXBlockKey = @"block";
+static NSString *const _VIXCompletionHandlerKey = @"block";
 
 static NSString *const _VIXFoundItemsKey = @"foundItems";
 
@@ -22,6 +22,21 @@ static NSString *const _VIXHostKey = @"host";
     VixHandle _handle;
 }
 
+- (instancetype)initWithNativeHandle:(VixHandle)aNativeHandle
+{
+    self = [super init];
+    
+    if (self)
+    {
+        if (aNativeHandle == VIX_INVALID_HANDLE)
+            return nil;
+
+        _handle = aNativeHandle;
+    }
+    
+    return self;
+}
+
 - (instancetype)initWithAPIVersion:(int)anAPIVersion
                           hostType:(VixServiceProvider)aHostType
                           hostName:(NSString *)aHostName
@@ -31,31 +46,26 @@ static NSString *const _VIXHostKey = @"host";
                            options:(VixHostOptions)anOptions
                       propertyList:(VixHandle)aPropertyList
 {
-    self = [super init];
-
-    if (self)
-    {
-        VixHandle h = VixHost_Connect(anAPIVersion,
-                                      aHostType,
-                                      [aHostName UTF8String],
-                                      aHostPort,
-                                      [aUserName UTF8String],
-                                      [aPassword UTF8String],
-                                      anOptions,
-                                      aPropertyList,
-                                      NULL,
-                                      NULL);
-        VixError e = VixJob_Wait(h,
-                                 VIX_PROPERTY_JOB_RESULT_HANDLE,
-                                 &_handle,
-                                 VIX_PROPERTY_NONE);
-        Vix_ReleaseHandle(h);
-
-        if (!VIX_SUCCEEDED(e))
-            return nil;
-    }
-
-    return self;
+    VixHandle h = VixHost_Connect(anAPIVersion,
+                                  aHostType,
+                                  [aHostName UTF8String],
+                                  aHostPort,
+                                  [aUserName UTF8String],
+                                  [aPassword UTF8String],
+                                  anOptions,
+                                  aPropertyList,
+                                  NULL,
+                                  NULL);
+    VixError e = VixJob_Wait(h,
+                             VIX_PROPERTY_JOB_RESULT_HANDLE,
+                             &_handle,
+                             VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(h);
+    
+    if (VIX_SUCCEEDED(e))
+        return [self initWithNativeHandle:h];
+    else
+        return nil;
 }
 
 - (void)dealloc
@@ -136,11 +146,11 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
     else if (anEventType == VIX_EVENTTYPE_JOB_COMPLETED)
     {
         NSDictionary *arguments = (NSDictionary *)CFBridgingRelease(aContext);
-        void (^completionBlock)(NSArray *aPaths, NSError *anError) = arguments[_VIXBlockKey];
+        void (^completionHandler)(NSArray *aPaths, NSError *anError) = arguments[_VIXCompletionHandlerKey];
         NSMutableArray *foundItems = arguments[_VIXFoundItemsKey];
         NSError *objcError = nil;
 
-        assert(completionBlock != nil);
+        assert(completionHandler != nil);
         assert(foundItems != nil);
 
         VixError jobError = VIX_OK;
@@ -150,22 +160,12 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
         if (VIX_SUCCEEDED(error))
         {
             if (!VIX_SUCCEEDED(jobError))
-            {
-                const char *jobErrorText = Vix_GetErrorText(jobError, NULL);
-                objcError = [NSError errorWithDomain:VIXErrorDomain
-                                                code:jobError
-                                            userInfo:jobErrorText ? @{NSLocalizedDescriptionKey : @(jobErrorText)} : nil];
-            }
+                objcError = [NSError VIX_errorWithVixError:jobError];
         }
         else
-        {
-            const char *errorText = Vix_GetErrorText(error, NULL);
-            objcError = [NSError errorWithDomain:VIXErrorDomain
-                                            code:error
-                                        userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
-        }
+            objcError = [NSError VIX_errorWithVixError:error];
 
-        completionBlock(foundItems, objcError);
+        completionHandler(foundItems, objcError);
     }
 }
 
@@ -179,14 +179,10 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
                                             SynchronouslyFindItemsCallback,
                                             (__bridge void *)(foundItems));
     VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
 
     if (!VIX_SUCCEEDED(error) && outError)
-    {
-        const char *errorText = Vix_GetErrorText(error, NULL);
-        *outError = [NSError errorWithDomain:VIXErrorDomain
-                                        code:error
-                                    userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
-    }
+        *outError = [NSError VIX_errorWithVixError:error];
 
     return foundItems;
 }
@@ -196,7 +192,7 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
     NSParameterAssert(aCompletionHandler);
 
     NSDictionary *arguments = @{
-        _VIXBlockKey        : [aCompletionHandler copy],
+    _VIXCompletionHandlerKey        : [aCompletionHandler copy],
         _VIXFoundItemsKey   : [NSMutableArray array]
     };
     VixHost_FindItems(_handle,
@@ -217,14 +213,10 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
                                             SynchronouslyFindItemsCallback,
                                             (__bridge void *)(foundItems));
     VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
 
     if (!VIX_SUCCEEDED(error) && outError)
-    {
-        const char *errorText = Vix_GetErrorText(error, NULL);
-        *outError = [NSError errorWithDomain:VIXErrorDomain
-                                        code:error
-                                    userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
-    }
+        *outError = [NSError VIX_errorWithVixError:error];
 
     return foundItems;
 }
@@ -234,7 +226,7 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
     NSParameterAssert(aCompletionHandler);
 
     NSDictionary *arguments = @{
-        _VIXBlockKey        : [aCompletionHandler copy],
+    _VIXCompletionHandlerKey        : [aCompletionHandler copy],
         _VIXFoundItemsKey   : [NSMutableArray array]
     };
     VixHost_FindItems(_handle,
@@ -248,10 +240,91 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
 
 #pragma mark Manage Virtual Machines
 
+static void AsynchronouslyChangeRegisterVMCallback(VixHandle aJobHandle,
+                                                   VixEventType anEventType,
+                                                   VixHandle anEventInfo,
+                                                   void *aContext)
+{
+    assert (aContext != NULL);
+
+    if (anEventType != VIX_EVENTTYPE_JOB_COMPLETED)
+        return;
+
+    NSDictionary *arguments = (NSDictionary *)CFBridgingRelease(aContext);
+    void (^completionHandler)(NSError *) = arguments[_VIXCompletionHandlerKey];
+
+    VixError jobError = VIX_OK;
+    VixError error = Vix_GetProperties(aJobHandle,
+                                       VIX_PROPERTY_JOB_RESULT_ERROR_CODE, &jobError,
+                                       VIX_PROPERTY_NONE);
+
+    NSError *objcError = nil;
+
+    if (VIX_SUCCEEDED(error))
+    {
+        if (!VIX_SUCCEEDED(jobError))
+            objcError = [NSError VIX_errorWithVixError:jobError];
+    }
+    else
+        objcError = [NSError VIX_errorWithVixError:jobError];
+
+    completionHandler(objcError);
+}
+
+- (BOOL)synchronouslyRegisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError
+{
+    VixHandle jobHandle = VixHost_RegisterVM(_handle,
+                                             [aPath UTF8String],
+                                             NULL,
+                                             NULL);
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
+
+    if (VIX_SUCCEEDED(error))
+        return YES;
+    else if (outError)
+    {
+        *outError = [NSError VIX_errorWithVixError:error];
+        return NO;
+    }
+}
+
+- (void)registerVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *))aCompletionHandler
+{
+    NSParameterAssert(aCompletionHandler != nil);
+
+    NSDictionary *arguments = @{
+    _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+        };
+    VixHost_RegisterVM(_handle,
+                       [aPath UTF8String],
+                       AsynchronouslyChangeRegisterVMCallback,
+                       (void *)CFBridgingRetain(arguments));
+}
+
+- (BOOL)synchronouslyUnregisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError
+{
+    VixHandle jobHandle = VixHost_UnregisterVM(_handle,
+                                             [aPath UTF8String],
+                                             NULL,
+                                             NULL);
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
+
+    if (VIX_SUCCEEDED(error))
+        return YES;
+    else if (outError)
+    {
+        *outError = [NSError VIX_errorWithVixError:error];
+        return NO;
+    }
+}
+
+
 static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
-                           VixEventType anEventType,
-                           VixHandle anEventInfo,
-                           void *aContext)
+                                         VixEventType anEventType,
+                                         VixHandle anEventInfo,
+                                         void *aContext)
 {
     assert(aContext != NULL);
 
@@ -259,10 +332,10 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
         return;
 
     NSDictionary *arguments = (NSDictionary *)CFBridgingRelease(aContext);
-    void (^completionBlock)(VIXVirtualMachine *aVM, NSError *anError) = arguments[_VIXBlockKey];
+    void (^completionHandler)(VIXVirtualMachine *aVM, NSError *anError) = arguments[_VIXCompletionHandlerKey];
     VIXHost *host = arguments[_VIXHostKey];
 
-    assert(completionBlock != nil);
+    assert(completionHandler != nil);
     assert(host != nil);
 
     VixError jobError = VIX_OK;
@@ -279,22 +352,12 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
         if (VIX_SUCCEEDED(jobError))
             vm = [[VIXVirtualMachine alloc] initWithHost:host nativeVMHandle:vmHandle];
         else
-        {
-            const char *jobErrorText = Vix_GetErrorText(jobError, NULL);
-            objcError = [NSError errorWithDomain:VIXErrorDomain
-                                            code:jobError
-                                        userInfo:jobErrorText ? @{NSLocalizedDescriptionKey : @(jobErrorText)} : nil];
-        }
+            objcError = [NSError VIX_errorWithVixError:jobError];
     }
     else
-    {
-        const char *errorText = Vix_GetErrorText(error, NULL);
-        objcError = [NSError errorWithDomain:VIXErrorDomain
-                                        code:error
-                                    userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
-    }
+        objcError = [NSError VIX_errorWithVixError:error];
 
-    completionBlock(vm, objcError);
+    completionHandler(vm, objcError);
 }
 
 - (void)openVirtualMachineAtPath:(NSString *)aPath
@@ -305,7 +368,7 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
     NSParameterAssert(aCompletionHandler != nil);
 
     NSDictionary *arguments = @{
-        _VIXBlockKey    : [aCompletionHandler copy],
+    _VIXCompletionHandlerKey    : [aCompletionHandler copy],
         _VIXHostKey     : self
     };
     VixHost_OpenVM(_handle,
@@ -314,6 +377,19 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
                    aPropertyList,
                    AsynchronouslyOpenVMCallback,
                    (void *)CFBridgingRetain(arguments));
+}
+
+- (void)unregisterVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *))aCompletionHandler
+{
+    NSParameterAssert(aCompletionHandler != nil);
+
+    NSDictionary *arguments = @{
+    _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixHost_UnregisterVM(_handle,
+                         [aPath UTF8String],
+                         AsynchronouslyChangeRegisterVMCallback,
+                         (void *)CFBridgingRetain(arguments));
 }
 
 - (VIXVirtualMachine *)synchronouslyOpenVirtualMachineAtPath:(NSString *)aPath
@@ -331,18 +407,14 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
     VixError error = VixJob_Wait(jobHandle,
                                  VIX_PROPERTY_JOB_RESULT_HANDLE, &vmHandle,
                                  VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
 
     if (VIX_SUCCEEDED(error))
         return [[VIXVirtualMachine alloc] initWithHost:self nativeVMHandle:vmHandle];
     else
     {
         if (outError)
-        {
-            const char *errorText = Vix_GetErrorText(error, NULL);
-            *outError = [NSError errorWithDomain:VIXErrorDomain
-                                            code:error
-                                        userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
-        }
+            *outError = [NSError VIX_errorWithVixError:error];
 
         return nil;
     }
