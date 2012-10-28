@@ -7,4 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <VIXObjC/vix.h>
 #import <VIXObjC/VIXHost.h>
+#import <VIXObjC/VIXVirtualMachine.h>
+#import <VIXObjC/VIXTypes.h>
+#import <VIXObjC/VIXErrors.h>
