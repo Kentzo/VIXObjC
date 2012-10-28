@@ -283,6 +283,4 @@
                     propertyList:(VixHandle)aPropertyList
                completionHandler:(void (^)(VIXVirtualMachine *aVM, NSError *anError))aCompletionHandler;
 
-- 
-
 @end

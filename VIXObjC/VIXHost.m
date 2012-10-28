@@ -282,9 +282,10 @@ static void AsynchronouslyChangeRegisterVMCallback(VixHandle aJobHandle,
 
     if (VIX_SUCCEEDED(error))
         return YES;
-    else if (outError)
+    else
     {
-        *outError = [NSError VIX_errorWithVixError:error];
+        if (outError)
+            *outError = [NSError VIX_errorWithVixError:error];
         return NO;
     }
 }
@@ -313,9 +314,10 @@ static void AsynchronouslyChangeRegisterVMCallback(VixHandle aJobHandle,
 
     if (VIX_SUCCEEDED(error))
         return YES;
-    else if (outError)
+    else
     {
-        *outError = [NSError VIX_errorWithVixError:error];
+        if (outError)
+            *outError = [NSError VIX_errorWithVixError:error];
         return NO;
     }
 }
@@ -368,8 +370,8 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
     NSParameterAssert(aCompletionHandler != nil);
 
     NSDictionary *arguments = @{
-    _VIXCompletionHandlerKey    : [aCompletionHandler copy],
-        _VIXHostKey     : self
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy],
+        _VIXHostKey                 : self
     };
     VixHost_OpenVM(_handle,
                    [aPath UTF8String],
