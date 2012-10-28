@@ -10,3 +10,16 @@
 
 
 NSString *VIXErrorDomain = @"com.kulakov.VIXObjC";
+
+
+@implementation NSError (VIX)
+
++ (NSError *)VIX_errorWithVixError:(VixError)anErrorCode
+{
+    const char *errorText = Vix_GetErrorText(anErrorCode, NULL);
+    return [NSError errorWithDomain:VIXErrorDomain
+                               code:anErrorCode
+                           userInfo:errorText ? @{NSLocalizedDescriptionKey : @(errorText)} : nil];
+}
+
+@end

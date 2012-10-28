@@ -7,6 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <VIXObjC/vix.h>
 
 
 extern NSString *VIXErrorDomain;
+
+
+@interface NSError (VIX)
+
++ (NSError *)VIX_errorWithVixError:(VixError)anErrorCode;
+
+@end
