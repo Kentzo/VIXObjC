@@ -91,34 +91,6 @@ static NSString *const _VIXHostKey = @"host";
 
 #pragma mark Find Items
 
-static void SynchronouslyFindItemsCallback(VixHandle aJobHandle,
-                                           VixEventType anEventType,
-                                           VixHandle anEventInfo,
-                                           void *aContext)
-{
-    if (aContext == NULL)
-        return;
-
-    if (anEventType != VIX_EVENTTYPE_FIND_ITEM)
-        return;
-
-    char *path = NULL;
-    VixError error = Vix_GetProperties(anEventInfo,
-                                       VIX_PROPERTY_FOUND_ITEM_LOCATION, &path,
-                                       VIX_PROPERTY_NONE);
-    if (VIX_SUCCEEDED(error) && path)
-    {
-        NSMutableArray *foundItems = (__bridge NSMutableArray *)aContext;
-        [foundItems addObject:@(path)];
-        Vix_FreeBuffer(path);
-    }
-    else
-    {
-        // Ignore this error
-        // TODO: log error
-    }
-}
-
 static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
                                             VixEventType anEventType,
                                             VixHandle anEventInfo,
@@ -170,24 +142,6 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
     }
 }
 
-- (NSArray *)synchronouslyFindRunningVirtualMachinePaths:(out __autoreleasing NSError **)outError
-{
-    NSMutableArray *foundItems = [NSMutableArray array];
-    VixHandle jobHandle = VixHost_FindItems(_handle,
-                                            VIX_FIND_RUNNING_VMS,
-                                            VIX_INVALID_HANDLE,
-                                            -1,
-                                            SynchronouslyFindItemsCallback,
-                                            (__bridge void *)(foundItems));
-    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
-    Vix_ReleaseHandle(jobHandle);
-
-    if (!VIX_SUCCEEDED(error) && outError)
-        *outError = [NSError VIX_errorWithVixError:error];
-
-    return foundItems;
-}
-
 - (void)findRunningVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler
 {
     NSParameterAssert(aCompletionHandler);
@@ -202,24 +156,6 @@ static void AsynchronouslyFindItemsCallback(VixHandle aJobHandle,
                       -1,
                       AsynchronouslyFindItemsCallback,
                       (void *)CFBridgingRetain(arguments));
-}
-
-- (NSArray *)synchronouslyFindRegisteredVirtualMachinePaths:(out __autoreleasing NSError **)outError
-{
-    NSMutableArray *foundItems = [NSMutableArray array];
-    VixHandle jobHandle = VixHost_FindItems(_handle,
-                                            VIX_FIND_REGISTERED_VMS,
-                                            VIX_INVALID_HANDLE,
-                                            -1,
-                                            SynchronouslyFindItemsCallback,
-                                            (__bridge void *)(foundItems));
-    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
-    Vix_ReleaseHandle(jobHandle);
-
-    if (!VIX_SUCCEEDED(error) && outError)
-        *outError = [NSError VIX_errorWithVixError:error];
-
-    return foundItems;
 }
 
 - (void)findRegisteredVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler
@@ -272,25 +208,6 @@ static void AsynchronouslyChangeRegisterVMCallback(VixHandle aJobHandle,
     completionHandler(objcError);
 }
 
-- (BOOL)synchronouslyRegisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError
-{
-    VixHandle jobHandle = VixHost_RegisterVM(_handle,
-                                             [aPath UTF8String],
-                                             NULL,
-                                             NULL);
-    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
-    Vix_ReleaseHandle(jobHandle);
-
-    if (VIX_SUCCEEDED(error))
-        return YES;
-    else
-    {
-        if (outError)
-            *outError = [NSError VIX_errorWithVixError:error];
-        return NO;
-    }
-}
-
 - (void)registerVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *))aCompletionHandler
 {
     NSParameterAssert(aCompletionHandler != nil);
@@ -302,25 +219,6 @@ static void AsynchronouslyChangeRegisterVMCallback(VixHandle aJobHandle,
                        [aPath UTF8String],
                        AsynchronouslyChangeRegisterVMCallback,
                        (void *)CFBridgingRetain(arguments));
-}
-
-- (BOOL)synchronouslyUnregisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError
-{
-    VixHandle jobHandle = VixHost_UnregisterVM(_handle,
-                                             [aPath UTF8String],
-                                             NULL,
-                                             NULL);
-    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
-    Vix_ReleaseHandle(jobHandle);
-
-    if (VIX_SUCCEEDED(error))
-        return YES;
-    else
-    {
-        if (outError)
-            *outError = [NSError VIX_errorWithVixError:error];
-        return NO;
-    }
 }
 
 
@@ -395,6 +293,114 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
                          (void *)CFBridgingRetain(arguments));
 }
 
+@end
+
+
+@implementation VIXHost (Synchronous)
+
+
+static void SynchronouslyFindItemsCallback(VixHandle aJobHandle,
+                                           VixEventType anEventType,
+                                           VixHandle anEventInfo,
+                                           void *aContext)
+{
+    if (aContext == NULL)
+        return;
+    
+    if (anEventType != VIX_EVENTTYPE_FIND_ITEM)
+        return;
+    
+    char *path = NULL;
+    VixError error = Vix_GetProperties(anEventInfo,
+                                       VIX_PROPERTY_FOUND_ITEM_LOCATION, &path,
+                                       VIX_PROPERTY_NONE);
+    if (VIX_SUCCEEDED(error) && path)
+    {
+        NSMutableArray *foundItems = (__bridge NSMutableArray *)aContext;
+        [foundItems addObject:@(path)];
+        Vix_FreeBuffer(path);
+    }
+    else
+    {
+        // Ignore this error
+        // TODO: log error
+    }
+}
+
+- (NSArray *)synchronouslyFindRunningVirtualMachinePaths:(out __autoreleasing NSError **)outError
+{
+    NSMutableArray *foundItems = [NSMutableArray array];
+    VixHandle jobHandle = VixHost_FindItems(_handle,
+                                            VIX_FIND_RUNNING_VMS,
+                                            VIX_INVALID_HANDLE,
+                                            -1,
+                                            SynchronouslyFindItemsCallback,
+                                            (__bridge void *)(foundItems));
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
+    
+    if (!VIX_SUCCEEDED(error) && outError)
+        *outError = [NSError VIX_errorWithVixError:error];
+    
+    return foundItems;
+}
+
+- (NSArray *)synchronouslyFindRegisteredVirtualMachinePaths:(out __autoreleasing NSError **)outError
+{
+    NSMutableArray *foundItems = [NSMutableArray array];
+    VixHandle jobHandle = VixHost_FindItems(_handle,
+                                            VIX_FIND_REGISTERED_VMS,
+                                            VIX_INVALID_HANDLE,
+                                            -1,
+                                            SynchronouslyFindItemsCallback,
+                                            (__bridge void *)(foundItems));
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
+    
+    if (!VIX_SUCCEEDED(error) && outError)
+        *outError = [NSError VIX_errorWithVixError:error];
+    
+    return foundItems;
+}
+
+- (BOOL)synchronouslyRegisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError
+{
+    VixHandle jobHandle = VixHost_RegisterVM(_handle,
+                                             [aPath UTF8String],
+                                             NULL,
+                                             NULL);
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
+    
+    if (VIX_SUCCEEDED(error))
+        return YES;
+    else
+    {
+        if (outError)
+            *outError = [NSError VIX_errorWithVixError:error];
+        return NO;
+    }
+}
+
+- (BOOL)synchronouslyUnregisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError
+{
+    VixHandle jobHandle = VixHost_UnregisterVM(_handle,
+                                               [aPath UTF8String],
+                                               NULL,
+                                               NULL);
+    VixError error = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
+    Vix_ReleaseHandle(jobHandle);
+    
+    if (VIX_SUCCEEDED(error))
+        return YES;
+    else
+    {
+        if (outError)
+            *outError = [NSError VIX_errorWithVixError:error];
+        return NO;
+    }
+}
+
 - (VIXVirtualMachine *)synchronouslyOpenVirtualMachineAtPath:(NSString *)aPath
                                                      options:(VixVMOpenOptions)anOptions
                                                 propertyList:(VixHandle)aPropertyList
@@ -411,14 +417,14 @@ static void AsynchronouslyOpenVMCallback(VixHandle aJobHandle,
                                  VIX_PROPERTY_JOB_RESULT_HANDLE, &vmHandle,
                                  VIX_PROPERTY_NONE);
     Vix_ReleaseHandle(jobHandle);
-
+    
     if (VIX_SUCCEEDED(error))
         return [[VIXVirtualMachine alloc] initWithHost:self nativeVMHandle:vmHandle];
     else
     {
         if (outError)
             *outError = [NSError VIX_errorWithVixError:error];
-
+        
         return nil;
     }
 }

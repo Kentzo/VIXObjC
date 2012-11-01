@@ -105,6 +105,71 @@
 #pragma mark Find Items
 
 /*!
+    @brief      Asynchronously finds paths to configuration files (.vmx) of currently running Virtual Machines.
+    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
+                aPaths is always non-nil. It contains paths to configuration files (.vmx) of currently registered Virtual Machines.
+                If anError is also non-nil, aPaths represents items found before the error.
+    @see        synchronouslyFindRunningVirtualMachinePaths:
+ */
+- (void)findRunningVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler;
+
+/*!
+    @brief      Asynchronously finds paths to configuration files (.vmx) of currently registered Virtual Machines.
+    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
+                aPaths is always non-nil. It contains paths to configuration files (.vmx) of registered registered Virtual Machines.
+                If anError is also non-nil, aPaths represents items found before the error.
+    @see        synchronouslyFindRegisteredVirtualMachinePaths:
+ */
+- (void)findRegisteredVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler;
+
+
+#pragma mark Manage Virtual Machines
+
+/*!
+    @brief      Asynchronously adds a virtual machine to host's (Server of vSphere) inventory.
+    @param      aPath Path to the Virtual Machine configuration file (.vmx) on the host.
+    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
+                If any error occurs, anError will be non-nil.
+    @see        synchronouslyRegisterVirtualMachineAtPath:error:
+    @see        initWithAPIVersion:hostType:hostName:hostPort:userName:password:options:propertyList:
+ */
+- (void)registerVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+/*!
+    @brief      Asynchronously removes a virtual machine from host's (Server or vSphere) inventory.
+    @param      aPath Path to the Virtual Machine configuration file (.vmx) on the host.
+    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
+                If any error occurs, anError will be non-nil.
+    @see        synchronouslyUnregisterVirtualMachineAtPath:error:
+    @see        initWithAPIVersion:hostType:hostName:hostPort:userName:password:options:propertyList:
+ */
+- (void)unregisterVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+/*!
+    @brief      Asynchronously opens Virtual Machine on the receiver and returns its pointer.
+    @param      aPath Path to the Virtual Machine configuration file on the host.
+    @param      anOptions MUST be VIX_VMOPEN_NORMAL.
+    @param      aPropertyList A handle to a property list containing extra information that might be needed
+                to open the VM. This parameter is optional;
+                you can pass VIX_INVALID_HANDLE if no extra information is needed.
+    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
+                If VM is successfully opened, aVM will be non-nil. Otherwise anError will be non-nil.
+    @see        synchronouslyOpenVirtualMachineAtPath:options:propertyList:error:
+    @see        initWithAPIVersion:hostType:hostName:hostPort:userName:password:options:propertyList:
+    @see        synchronouslyRegisterVirtualMachineAtPath:error:
+    @see        registerVirtualMachineAtPath:completionHandler:
+ */
+- (void)openVirtualMachineAtPath:(NSString *)aPath
+                         options:(VixVMOpenOptions)anOptions
+                    propertyList:(VixHandle)aPropertyList
+               completionHandler:(void (^)(VIXVirtualMachine *aVM, NSError *anError))aCompletionHandler;
+
+@end
+
+
+@interface VIXHost (Synchronous)
+
+/*!
     @brief      Returns paths to configuration files (.vmx) of currently running Virtual Machines.
     @param      outError Out parameter used if an error occurs. MAY be NULL.
     @result     Non-nil array representing paths to configuration files (.vmx) of currently running Virtual Machines.
@@ -114,14 +179,6 @@
  */
 - (NSArray *)synchronouslyFindRunningVirtualMachinePaths:(__autoreleasing NSError **)outError;
 
-/*!
-    @brief      Asynchronously finds paths to configuration files (.vmx) of currently running Virtual Machines.
-    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
-                aPaths is always non-nil. It contains paths to configuration files (.vmx) of currently registered Virtual Machines.
-                If anError is also non-nil, aPaths represents items found before the error.
-    @see        synchronouslyFindRunningVirtualMachinePaths:
- */
-- (void)findRunningVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler;
 
 /*!
     @brief      Returns paths to configuration files (.vmx) of currently registered Virtual Machines.
@@ -135,18 +192,6 @@
     @see        findRegisteredVirtualMachinePathsWithCompletionHandler:
  */
 - (NSArray *)synchronouslyFindRegisteredVirtualMachinePaths:(__autoreleasing NSError **)outError;
-
-/*!
-    @brief      Asynchronously finds paths to configuration files (.vmx) of currently registered Virtual Machines.
-    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
-                aPaths is always non-nil. It contains paths to configuration files (.vmx) of registered registered Virtual Machines.
-                If anError is also non-nil, aPaths represents items found before the error.
-    @see        synchronouslyFindRegisteredVirtualMachinePaths:
- */
-- (void)findRegisteredVirtualMachinePathsWithCompletionHandler:(void (^)(NSArray *aPaths, NSError *anError))aCompletionHandler;
-
-
-#pragma mark Manage Virtual Machines
 
 /*!
     @brief      Adds a virtual machine to host's (Server or vSphere) inventory.
@@ -174,16 +219,6 @@
 - (BOOL)synchronouslyRegisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError;
 
 /*!
-    @brief      Asynchronously adds a virtual machine to host's (Server of vSphere) inventory.
-    @param      aPath Path to the Virtual Machine configuration file (.vmx) on the host.
-    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
-                If any error occurs, anError will be non-nil.
-    @see        synchronouslyRegisterVirtualMachineAtPath:error:
-    @see        initWithAPIVersion:hostType:hostName:hostPort:userName:password:options:propertyList:
- */
-- (void)registerVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *anError))aCompletionHandler;
-
-/*!
     @brief      Removes a virtual machine from host's (Server or vSphere) inventory.
     @param      aPath Path to the Virtual Machine configuration file (.vmx) on the host.
     @param      outError Out parameter used if an error occurs. MAY be NULL.
@@ -209,15 +244,6 @@
  */
 - (BOOL)synchronouslyUnregisterVirtualMachineAtPath:(NSString *)aPath error:(__autoreleasing NSError **)outError;
 
-/*!
-    @brief      Asynchronously removes a virtual machine from host's (Server or vSphere) inventory.
-    @param      aPath Path to the Virtual Machine configuration file (.vmx) on the host.
-    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
-                If any error occurs, anError will be non-nil.
-    @see        synchronouslyUnregisterVirtualMachineAtPath:error:
-    @see        initWithAPIVersion:hostType:hostName:hostPort:userName:password:options:propertyList:
- */
-- (void)unregisterVirtualMachineAtPath:(NSString *)aPath completionHandler:(void (^)(NSError *anError))aCompletionHandler;
 
 /*!
     @brief      Opens Virtual Machine on the receiver and returns its pointer.
@@ -263,24 +289,5 @@
                                                      options:(VixVMOpenOptions)anOptions
                                                 propertyList:(VixHandle)aPropertyList
                                                        error:(__autoreleasing NSError **)outError;
-
-/*!
-    @brief      Asynchronously opens Virtual Machine on the receiver and returns its pointer.
-    @param      aPath Path to the Virtual Machine configuration file on the host.
-    @param      anOptions MUST be VIX_VMOPEN_NORMAL.
-    @param      aPropertyList A handle to a property list containing extra information that might be needed
-                to open the VM. This parameter is optional;
-                you can pass VIX_INVALID_HANDLE if no extra information is needed.
-    @param      aCompletionHandler The handler block to execute. MUST NOT be nil.
-                If VM is successfully opened, aVM will be non-nil. Otherwise anError will be non-nil.
-    @see        synchronouslyOpenVirtualMachineAtPath:options:propertyList:error:
-    @see        initWithAPIVersion:hostType:hostName:hostPort:userName:password:options:propertyList:
-    @see        synchronouslyRegisterVirtualMachineAtPath:error:
-    @see        registerVirtualMachineAtPath:completionHandler:
- */
-- (void)openVirtualMachineAtPath:(NSString *)aPath
-                         options:(VixVMOpenOptions)anOptions
-                    propertyList:(VixHandle)aPropertyList
-               completionHandler:(void (^)(VIXVirtualMachine *aVM, NSError *anError))aCompletionHandler;
 
 @end
