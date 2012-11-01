@@ -7,6 +7,10 @@
 //
 
 #import "VIXVirtualMachine.h"
+#import "VIXErrors.h"
+
+
+static NSString *const _VIXCompletionHandlerKey = @"block";
 
 
 @implementation VIXVirtualMachine
@@ -162,7 +166,6 @@ static NSNumber* GetNumberProperty(VixHandle aVMHandle, VixPropertyID aPropertyI
     return GetNumberProperty(_handle, VIX_PROPERTY_VM_SUPPORTED_FEATURES);
 }
 
-
 - (NSNumber *)isPartOfTeam
 {
     return GetNumberProperty(_handle, VIX_PROPERTY_VM_IN_VMTEAM);
@@ -181,6 +184,100 @@ static NSNumber* GetNumberProperty(VixHandle aVMHandle, VixPropertyID aPropertyI
 - (NSNumber *)isRunning
 {
     return GetNumberProperty(_handle, VIX_PROPERTY_VM_IS_RUNNING);
+}
+
+
+#pragma mark Methods
+
+static void PowerOperationCallback(VixHandle aJobHandle,
+                                   VixEventType anEventType,
+                                   VixHandle anEventInfo,
+                                   void *aContext)
+{
+    if (aContext == NULL)
+        return;
+
+    if (anEventType != VIX_EVENTTYPE_JOB_COMPLETED)
+        return;
+
+    VixError error = VixJob_GetError(aJobHandle);
+    NSError *objcError = nil;
+
+    if (!VIX_SUCCEEDED(error))
+        objcError = [NSError VIX_errorWithVixError:error];
+
+    NSDictionary *arguments = (NSDictionary *)CFBridgingRelease(aContext);
+    void (^completionHandler)(NSError *anError) = arguments[_VIXCompletionHandlerKey];
+    completionHandler(objcError);
+}
+
+- (void)pauseWithCompletionHandler:(void (^)(NSError *))aCompletionHandler
+{
+    NSDictionary *arguments = @{
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixVM_Pause(_handle,
+                0,
+                VIX_INVALID_HANDLE,
+                PowerOperationCallback,
+                (void *)CFBridgingRetain(arguments));
+}
+
+- (void)unpauseWithCompletionHandler:(void (^)(NSError *))aCompletionHandler
+{
+    NSDictionary *arguments = @{
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixVM_Unpause(_handle,
+                  0,
+                  VIX_INVALID_HANDLE,
+                  PowerOperationCallback,
+                  (void *)CFBridgingRetain(arguments));
+}
+
+- (void)powerOffFromGuest:(BOOL)aFromGuest completionHandler:(void (^)(NSError *anError))aCompletionHandler
+{
+    NSDictionary *arguments = @{
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixVM_PowerOff(_handle,
+                   aFromGuest ? VIX_VMPOWEROP_FROM_GUEST : VIX_VMPOWEROP_NORMAL,
+                   PowerOperationCallback,
+                   (void *)CFBridgingRetain(arguments));
+}
+
+- (void)powerOnWithGUI:(BOOL)aShouldShowGUI completionHandler:(void (^)(NSError *))aCompletionHandler
+{
+    NSDictionary *arguments = @{
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixVM_PowerOn(_handle,
+                  aShouldShowGUI ? VIX_VMPOWEROP_LAUNCH_GUI : VIX_VMPOWEROP_NORMAL,
+                  VIX_INVALID_HANDLE,
+                  PowerOperationCallback,
+                  (void *)CFBridgingRetain(arguments));
+}
+
+- (void)resetFromGuest:(BOOL)aFromGuest completionHandler:(void (^)(NSError *anError))aCompletionHandler
+{
+    NSDictionary *arguments = @{
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixVM_Reset(_handle,
+                aFromGuest ? VIX_VMPOWEROP_FROM_GUEST : VIX_VMPOWEROP_NORMAL,
+                PowerOperationCallback,
+                (void *)CFBridgingRetain(arguments));
+}
+
+- (void)suspendWithCompletionHandler:(void (^)(NSError *))aCompletionHandler
+{
+    NSDictionary *arguments = @{
+        _VIXCompletionHandlerKey    : [aCompletionHandler copy]
+    };
+    VixVM_Suspend(_handle,
+                  0,
+                  PowerOperationCallback,
+                  (void *)CFBridgingRetain(arguments));
 }
 
 @end

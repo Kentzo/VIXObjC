@@ -85,4 +85,16 @@
 
 - (NSNumber *)supportedFeatures;
 
+- (void)pauseWithCompletionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+- (void)unpauseWithCompletionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+- (void)powerOffFromGuest:(BOOL)aFromGuest completionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+- (void)powerOnWithGUI:(BOOL)aShouldShowGUI completionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+- (void)resetFromGuest:(BOOL)aFromGuest completionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
+- (void)suspendWithCompletionHandler:(void (^)(NSError *anError))aCompletionHandler;
+
 @end
