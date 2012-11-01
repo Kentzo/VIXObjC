@@ -24,12 +24,12 @@
 		BA9AFAA51635695800FAAAD3 /* VIXHost.h in Headers */ = {isa = PBXBuildFile; fileRef = BA9AFAA31635695800FAAAD3 /* VIXHost.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BA9AFAA61635695800FAAAD3 /* VIXHost.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9AFAA41635695800FAAAD3 /* VIXHost.m */; };
 		BA9AFAA816356CCE00FAAAD3 /* VIXObjC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA9AFA5F1635667300FAAAD3 /* VIXObjC.framework */; };
-		BC5989D453C0F3FACA5D14E1 /* VIXTypes.h in Copy libvixAllProducts */ = {isa = PBXBuildFile; fileRef = BC598E6C404846EED4488C8D /* VIXTypes.h */; };
 		E22DEE671636FDC70052FF3D /* VIXErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E22DEE661636FDC70052FF3D /* VIXErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E22DEE6A1636FE2B0052FF3D /* VIXErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = E22DEE691636FE2B0052FF3D /* VIXErrors.m */; };
 		E29FE73E1636D90F00C1357A /* VIXTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = BC598E6C404846EED4488C8D /* VIXTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E29FE7421636DA0200C1357A /* VIXVirtualMachine.h in Headers */ = {isa = PBXBuildFile; fileRef = E29FE7401636DA0200C1357A /* VIXVirtualMachine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E29FE7431636DA0200C1357A /* VIXVirtualMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = E29FE7411636DA0200C1357A /* VIXVirtualMachine.m */; };
+		E2A5B24B163D9B340083F9BB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9AFA671635667300FAAAD3 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +50,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				BA9AFA9F1635675700FAAAD3 /* libvixAllProducts.dylib in Copy libvixAllProducts */,
-				BC5989D453C0F3FACA5D14E1 /* VIXTypes.h in Copy libvixAllProducts */,
 			);
 			name = "Copy libvixAllProducts";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2A5B24B163D9B340083F9BB /* Foundation.framework in Frameworks */,
 				BA9AFA991635672C00FAAAD3 /* libvixAllProducts.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
