@@ -469,7 +469,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VIXObjC/VIXObjC-Prefix.pch";
 				INFOPLIST_FILE = "VIXObjC/VIXObjC-Info.plist";
-				LD_DYLIB_INSTALL_NAME = "@executable_path/../$(EXECUTABLE_PATH)";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/VIXObjC/libvixAllProducts\"",
@@ -489,7 +489,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VIXObjC/VIXObjC-Prefix.pch";
 				INFOPLIST_FILE = "VIXObjC/VIXObjC-Info.plist";
-				LD_DYLIB_INSTALL_NAME = "@executable_path/../$(EXECUTABLE_PATH)";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/VIXObjC/libvixAllProducts\"",
